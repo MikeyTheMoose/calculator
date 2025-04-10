@@ -85,6 +85,8 @@ button.special {
 
 .expression {
     font-size: 20px;
+    flex-wrap: wrap;
+    max-width: 375px;
 }
 
 .result {

@@ -7,18 +7,48 @@
 body {
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    background-color: rgb(25, 41, 40);
 }
 
 div {
     border: 1px solid black;
 }
 
+.header,
+.footer {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background-color: rgb(74, 78, 77);
+}
+
+.header {
+    font-size: 32px;
+    /* background-color: rgb(110, 165, 160); */
+    color: rgb(226, 226, 226);
+    font-weight: 900;
+}
+
+.footer {
+    justify-content: center;
+    
+}
+
+.footer > a {
+    color: rgb(226, 226, 226);
+}
+
 .container {
     display: flex;
     flex: 1;
+    justify-content: center;
+    align-items: center;
 }
 
-p {
-    color: blue;
-    border: 1px solid red;
+.frame {
+    margin: 300px 100px;
+    padding: 100px;
+    min-height: 300px;
+    min-width: 150px;
 }

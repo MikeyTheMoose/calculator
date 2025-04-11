@@ -3,7 +3,7 @@ let current = '0';
 let expression = '';
 let prevType = null;
 let prevOp = null;
-let operation = null;
+
 const displayResult = document.querySelector('.result');
 const displayExpression = document.querySelector('.expression');
 
@@ -32,19 +32,18 @@ function handleNumber(num) {
         case null:
             prevType = 'number';
             current = num;
+            console.log(prevType)
             break;
         case 'number':
             current += num;
             break;
         case 'operator':
-            prevType = 'operator';
+            // ??? Maybe depends on if it's equals or not?
+            // Otherwise don't need this.
     }
 
-    
-    displayResult.textContent = current;
-    //handleExpression(num);
     expression += num;
-
+    handleDisplay();
 }
 
 function handleOperator(op) {
@@ -66,7 +65,6 @@ function handleOperator(op) {
                 multiply(result,current);
                 break;
         }
-        
     }
 
     if (prevOp != 'equals') {
@@ -76,13 +74,34 @@ function handleOperator(op) {
 }
 
 function handleSpecial(sign) {
-    console.log('special')
+    switch (sign) {
+        case 'clear':
+            result = 0;
+            expression = '';
+            prevType = null;
+            prevOp = null;
+            current = '0';
+        case 'backspace':
+            current = current.substr(0,current.length-1)
+            break;
+        case 'plusminus':
+            current = (+current) * -1;
+        case 'percent':
+            current = parseFloat(+current/100);
+    }
+
+    handleDisplay();
 }
 
 function handleExpression(content) {
     expression += content;
     displayExpression.textContent = expression;
     current = ' ';
+}
+
+function handleDisplay() {
+    displayExpression.textContent = expression;
+    displayResult.textContent = current;
 }
 
 function add(num1, num2) {

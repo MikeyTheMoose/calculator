@@ -87,11 +87,13 @@ button.special {
     font-size: 20px;
     flex-wrap: wrap;
     max-width: 375px;
+    min-height: 23px;
 }
 
 .result {
     font-size: 72px;
     max-width: 375px;
+    min-height: 82px;
 }
 
 .keypad {

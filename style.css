@@ -91,6 +91,7 @@ button.special {
 
 .result {
     font-size: 72px;
+    max-width: 375px;
 }
 
 .keypad {

@@ -5,6 +5,7 @@ let prevType = null;
 let prevOp = null;
 let isEquals = false;
 let prevNumber = null;
+let error = false;
 
 const displayResult = document.querySelector('.result');
 const displayExpression = document.querySelector('.expression');
@@ -139,10 +140,14 @@ function reset() {
     prevOp = null;
     current = '0';
     isEquals = false;
+    error = false;
 }
 
 function handleDisplay() {
-    if (current.toString().length > 9) {
+    if (error) {
+        current = result;
+    }
+    else if (current.toString().length > 9) {
         current = current.toExponential();
         const notation = current.toString().split('e')
         console.log(5 - notation[1].substring(1).length)
@@ -163,7 +168,11 @@ function subtract(num1, num2) {
 }
 
 function divide(num1, num2) {
-    result = num1 / num2;
+    if (num2 == 0) {
+        error = true;
+        result = "Creating Blackhole"
+    } else 
+    {result = num1 / num2;}
 }
 
 function multiply(num1, num2) {

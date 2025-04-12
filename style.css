@@ -25,7 +25,8 @@ button.number {
     background-color: rgb(214, 214, 141);
 }
 
-button.operator {
+button.operator,
+button.equals {
     background-color: rgb(21, 77, 74);
 }
 

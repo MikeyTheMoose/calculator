@@ -70,7 +70,7 @@ function handleOperator(op) {
     }
     prevType = 'operator';
     expression += current + op.textContent;
-    prevOp = op.id;
+    prevOp = op;
     current = result;
     handleDisplay();
     // Once a second operator is entered, perform the first operator.
@@ -78,7 +78,7 @@ function handleOperator(op) {
 }
 
 function performOperation(num = current) {
-    switch (prevOp) {
+    switch (prevOp.id) {
         case 'plus':
             add(result,num);
             break;
@@ -99,11 +99,10 @@ function handleEquals() {
         prevNumber = current;
         console.log("test",prevNumber)
     }
-
+    expression = result + prevOp.textContent + prevNumber + "=";
     if (prevOp) {
         performOperation(prevNumber);
     }
-    expression = result + prevOp + prevNumber;
     current = result;
     handleDisplay();
 
@@ -120,8 +119,15 @@ function handleSpecial(sign) {
             break;
         case 'plusminus':
             current = (+current) * -1;
+            break;
         case 'percent':
             current = parseFloat(+current/100);
+            break;
+        case 'decimal':
+            if (!current.includes('.')) { 
+                current += '.';
+            }
+            break;
     }
 
     handleDisplay();
@@ -137,6 +143,11 @@ function reset() {
 }
 
 function handleDisplay() {
+    console.log(current)
+    if (current.length > 9) {
+        current = current.slice(0,9);
+    }
+
     displayExpression.textContent = expression;
     displayResult.textContent = current;
 }

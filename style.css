@@ -34,6 +34,10 @@ button.special {
     background-color: rgb(97, 105, 101);
 }
 
+a {
+    color: white;
+}
+
 .header,
 .footer {
     display: flex;
@@ -87,13 +91,14 @@ button.special {
 .expression {
     font-size: 20px;
     flex-wrap: wrap;
-    max-width: 375px;
+    max-width: 380px;
     min-height: 23px;
 }
 
 .result {
     font-size: 72px;
-    max-width: 375px;
+    flex-wrap: wrap;
+    max-width: 390px;
     min-height: 82px;
 }
 

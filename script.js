@@ -46,14 +46,17 @@ function handleNumber(num) {
     }
 
     prevType = 'number';
-
-    // We only want to add the number to display if an operator is pressed...
-    //expression += num;
     handleDisplay();
 }
 
 function handleOperator(op) {
-    if (prevType != 'equals') {
+    switch (prevType) {
+        case 'operator':
+        case 'equals':
+            expression = '';
+            break;
+        default:
+
         // If the most recent operator pressed was equals, then we do NOT want to perform the operation again.
         // Otherwise 2x2=[4]+2= will yield 2x2=[4]+[8]2= [10], performing the multiplication a second time, as that is still prevOp.
 
@@ -65,16 +68,12 @@ function handleOperator(op) {
         } else {
             result = current;
         }
-    } else {
-        expression = '';
     }
     prevType = 'operator';
     expression += current + op.textContent;
     prevOp = op;
     current = result;
     handleDisplay();
-    // Once a second operator is entered, perform the first operator.
-    // Ex: 75 x 10 x -> perform the multiplication, set 'result' equal to value.
 }
 
 function performOperation(num = current) {
@@ -143,9 +142,12 @@ function reset() {
 }
 
 function handleDisplay() {
-    console.log(current)
-    if (current.length > 9) {
-        current = current.slice(0,9);
+    if (current.toString().length > 9) {
+        current = current.toExponential();
+        const notation = current.toString().split('e')
+        console.log(5 - notation[1].substring(1).length)
+        const notationSize = 6 - notation[1].substring(1).length;
+        current = notation[0].slice(0,notationSize) + 'e' + notation[1]
     }
 
     displayExpression.textContent = expression;

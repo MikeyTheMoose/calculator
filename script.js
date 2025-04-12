@@ -13,6 +13,8 @@ const displayExpression = document.querySelector('.expression');
 const buttons = document.querySelectorAll('button');
 buttons.forEach(btn => btn.addEventListener('click',buttonType))
 
+// ISSUE: Pressing Enter or = results in an issue if used after clearing. This issue does not appear when 'clicking' the equals button.
+// It seems to run handleEquals() twice for some reason.
 document.addEventListener("keypress", (event) => {
     const numbersArray = "0123456789";
     if (numbersArray.includes(event.key)) {
@@ -33,6 +35,7 @@ document.addEventListener("keypress", (event) => {
             break;
         case 'Enter':
         case '=':
+            console.log('Enter')
             handleEquals();
             break;
         case '%':

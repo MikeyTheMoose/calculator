@@ -78,9 +78,6 @@ function handleNumber(num) {
             break;
         case 'equals':
             current = num;
-        case 'clear':
-            reset();
-            current = num;
     }
 
     prevType = 'number';
@@ -134,7 +131,7 @@ function performOperation(num = current) {
 function handleEquals() {
     if (prevType === 'number') {
         prevNumber = current;
-    }
+    } else if (prevType === 'operator') {return;}
     if (prevOp) {
         expression = result + prevOp.textContent + prevNumber + "=";
         performOperation(prevNumber);
@@ -180,10 +177,11 @@ function reset() {
     current = '0';
     isEquals = false;
     error = false;
-    prevType = 'clear';
+    prevNumber = null;
 }
 
 function handleDisplay() {
+    console.log("Handledisplay: ",current, prevOp, prevType);
     if (error) {
         current = result;
     }
@@ -193,13 +191,11 @@ function handleDisplay() {
         const notationSize = 6 - notation[1].substring(1).length;
         current = notation[0].slice(0,notationSize) + 'e' + notation[1]
     }
-
     displayExpression.textContent = expression;
     displayResult.textContent = current;
 }
 
 function add(num1, num2) {
-    console.log(num1,num2)
     result = +num1 + +num2;
 }
 

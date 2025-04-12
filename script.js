@@ -13,6 +13,40 @@ const displayExpression = document.querySelector('.expression');
 const buttons = document.querySelectorAll('button');
 buttons.forEach(btn => btn.addEventListener('click',buttonType))
 
+document.addEventListener("keypress", (event) => {
+    const numbersArray = "0123456789";
+    if (numbersArray.includes(event.key)) {
+        handleNumber(event.key);
+    }
+    switch (event.key) {
+        case '*':
+            handleOperator({id:'multiply',textContent:'×'});
+            break;
+        case '/':
+            handleOperator({id:'divide',textContent:'÷'});
+            break;
+        case '+':
+            handleOperator({id:'plus',textContent:'+'});
+            break;
+        case '-':
+            handleOperator({id:'minus',textContent:'-'});
+            break;
+        case 'Enter':
+        case '=':
+            handleEquals();
+            break;
+        case '%':
+            handleSpecial('percent');
+            break;
+        case '.':
+            handleSpecial('decimal');
+            break;
+        
+    }
+    //if (event.keycode === 8) {handleSpecial('backspace')};
+})
+
+
 function buttonType(btn) {
     const selection = btn.target;
     const buttonType = btn.target.classList.value;
@@ -36,14 +70,17 @@ function buttonType(btn) {
 function handleNumber(num) {
     switch (prevType) {
         case null:
+        case 'operator':
             current = num;
             break;
         case 'number':
             current += num;
             break;
-        case 'operator':
+        case 'equals':
             current = num;
-            break;
+        case 'clear':
+            reset();
+            current = num;
     }
 
     prevType = 'number';
@@ -97,12 +134,14 @@ function performOperation(num = current) {
 function handleEquals() {
     if (prevType === 'number') {
         prevNumber = current;
-        console.log("test",prevNumber)
     }
-    expression = result + prevOp.textContent + prevNumber + "=";
     if (prevOp) {
+        expression = result + prevOp.textContent + prevNumber + "=";
         performOperation(prevNumber);
+        console.log(expression + result);
     }
+    
+    // Log equation history to console
     current = result;
     handleDisplay();
 
@@ -141,6 +180,7 @@ function reset() {
     current = '0';
     isEquals = false;
     error = false;
+    prevType = 'clear';
 }
 
 function handleDisplay() {
@@ -150,7 +190,6 @@ function handleDisplay() {
     else if (current.toString().length > 9) {
         current = current.toExponential();
         const notation = current.toString().split('e')
-        console.log(5 - notation[1].substring(1).length)
         const notationSize = 6 - notation[1].substring(1).length;
         current = notation[0].slice(0,notationSize) + 'e' + notation[1]
     }
@@ -160,6 +199,7 @@ function handleDisplay() {
 }
 
 function add(num1, num2) {
+    console.log(num1,num2)
     result = +num1 + +num2;
 }
 

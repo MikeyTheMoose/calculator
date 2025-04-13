@@ -15,7 +15,7 @@ buttons.forEach(btn => btn.addEventListener('click',buttonType))
 
 // ISSUE: Pressing Enter or = results in an issue if used after clearing. This issue does not appear when 'clicking' the equals button.
 // It seems to run handleEquals() twice for some reason.
-document.addEventListener("keypress", (event) => {
+document.addEventListener("keydown", (event) => {
     const numbersArray = "0123456789";
     if (numbersArray.includes(event.key)) {
         handleNumber(event.key);
@@ -43,9 +43,9 @@ document.addEventListener("keypress", (event) => {
         case '.':
             handleSpecial('decimal');
             break;
-        
+        case 'Backspace':
+            handleSpecial('backspace'); 
     }
-    //if (event.keycode === 8) {handleSpecial('backspace')};
 })
 
 
@@ -67,6 +67,10 @@ function buttonType(btn) {
             handleEquals();
             break;
     }
+
+    // After clicking a button, unfocus it. Otherwise pressing the Enter key will perform the equals operation
+    //   and then perform the button click action.
+    document.activeElement.blur();
 }
 
 function handleNumber(num) {
@@ -79,6 +83,7 @@ function handleNumber(num) {
             current += num;
             break;
         case 'equals':
+            reset();
             current = num;
     }
 
@@ -107,7 +112,7 @@ function handleOperator(op) {
         }
     }
     prevType = 'operator';
-    expression += current + op.textContent;
+    expression += round(current) + op.textContent;
     prevOp = op;
     current = result;
     handleDisplay();
@@ -135,12 +140,13 @@ function handleEquals() {
         prevNumber = current;
     } else if (prevType === 'operator') {return;}
     if (prevOp) {
-        expression = result + prevOp.textContent + prevNumber + "=";
+        expression = round(result) + prevOp.textContent + prevNumber + "=";
         performOperation(prevNumber);
+
+        // Print equation history to console.
         console.log(expression + result);
     }
     
-    // Log equation history to console
     current = result;
     handleDisplay();
 
@@ -151,7 +157,6 @@ function handleSpecial(sign) {
     switch (sign) {
         case 'clear':
             reset();
-            document.activeElement.blur();
             break;
         case 'backspace':
             current = current.substring(0,current.length-1)
@@ -168,7 +173,6 @@ function handleSpecial(sign) {
             }
             break;
     }
-
     handleDisplay();
 }
 
@@ -184,16 +188,20 @@ function reset() {
 }
 
 function handleDisplay() {
-    console.log("Handledisplay: ",current, prevOp, prevType);
     if (error) {
         current = result;
     }
-    else if (current.toString().length > 9) {
-        current = current.toExponential();
-        const notation = current.toString().split('e')
-        const notationSize = 6 - notation[1].substring(1).length;
-        current = notation[0].slice(0,notationSize) + 'e' + notation[1]
-    }
+    else {
+        if (+current > 1) {
+            current = round(+current)
+        }
+        if (current.toString().length > 9) {
+            current = current.toExponential();
+            const notation = current.toString().split('e')
+            const notationSize = 6 - notation[1].substring(1).length;
+            current = notation[0].slice(0,notationSize) + 'e' + notation[1]
+        }
+    } 
     displayExpression.textContent = expression;
     displayResult.textContent = current;
 }
@@ -211,9 +219,13 @@ function divide(num1, num2) {
         error = true;
         result = "Creating Blackhole"
     } else 
-    {result = num1 / num2;}
+    {result = num1/num2}
 }
 
 function multiply(num1, num2) {
     result = num1 * num2;
+}
+
+function round(num) {
+    return Math.round(num * 10000) / 10000;
 }

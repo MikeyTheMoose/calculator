@@ -35,7 +35,6 @@ document.addEventListener("keypress", (event) => {
             break;
         case 'Enter':
         case '=':
-            console.log('Enter')
             handleEquals();
             break;
         case '%':
@@ -152,6 +151,7 @@ function handleSpecial(sign) {
     switch (sign) {
         case 'clear':
             reset();
+            document.activeElement.blur();
             break;
         case 'backspace':
             current = current.substring(0,current.length-1)

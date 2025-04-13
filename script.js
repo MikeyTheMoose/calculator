@@ -151,11 +151,13 @@ function handleEquals() {
         prevNumber = current;
     } else if (prevType === 'operator') {return;}
     if (prevOp) {
+        // Print full expression, perform the operation, then print the operation.
+        console.log(expression + prevNumber + '=')
+
         expression = round(result) + prevOp.textContent + prevNumber + "=";
         performOperation(prevNumber);
 
-        // Print equation history to console.
-        console.log(expression + result);
+        console.log(result);
     } else {result = current}
 
     current = result;

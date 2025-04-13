@@ -20,7 +20,6 @@ document.addEventListener("keydown", (event) => {
     if (numbersArray.includes(event.key)) {
         handleNumber(event.key);
     }
-    console.log(event.key)
     switch (event.key) {
         case '*':
             handleOperator({id:'multiply',textContent:'×'});
@@ -88,6 +87,7 @@ function handleNumber(num) {
             current = num;
             break;
         case 'number':
+        case 'decimal':
             current += num;
             break;
         case 'equals':
@@ -153,8 +153,8 @@ function handleEquals() {
 
         // Print equation history to console.
         console.log(expression + result);
-    }
-    
+    } else {result = current}
+
     current = result;
     handleDisplay();
 
@@ -167,7 +167,8 @@ function handleSpecial(sign) {
             reset();
             break;
         case 'backspace':
-            current = current.substring(0,current.length-1)
+            try { current = current.substring(0,current.length-1)}
+            catch (error) {console.warn("You cannot backspace on the result.")}
             break;
         case 'plusminus':
             current = (+current) * -1;
@@ -178,7 +179,6 @@ function handleSpecial(sign) {
         case 'decimal':
             if (!current.toString().includes('.')) { 
                 current += '.';
-                console.log(current);
             }
             break;
     }
@@ -201,15 +201,7 @@ function handleDisplay() {
         current = result;
     }
     else {
-        if (+current > 1) {
-            current = round(+current)
-        }
-        if (current.toString().length > 9) {
-            current = current.toExponential();
-            const notation = current.toString().split('e')
-            const notationSize = 6 - notation[1].substring(1).length;
-            current = notation[0].slice(0,notationSize) + 'e' + notation[1]
-        }
+        handleDecimal();
     } 
     displayExpression.textContent = expression;
     displayResult.textContent = current;
@@ -237,4 +229,17 @@ function multiply(num1, num2) {
 
 function round(num) {
     return Math.round(num * 10000) / 10000;
+}
+
+function handleDecimal() {
+    if (current.toString().length > 9) {
+        if (+current > 0.0001) {
+            current = round(+current)
+        } else {
+            current = current.toExponential();
+            const notation = current.toString().split('e')
+            const notationSize = 6 - notation[1].substring(1).length;
+            current = notation[0].slice(0,notationSize) + 'e' + notation[1]
+        }
+    }
 }

@@ -17,7 +17,6 @@ buttons.forEach(btn => btn.addEventListener('click',buttonType))
 // It seems to run handleEquals() twice for some reason.
 document.addEventListener("keydown", (event) => {
     const numbersArray = "0123456789";
-    console.log(event.key)
     if (numbersArray.includes(event.key)) {
         handleNumber(event.key);
     }

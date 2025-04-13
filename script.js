@@ -20,6 +20,7 @@ document.addEventListener("keydown", (event) => {
     if (numbersArray.includes(event.key)) {
         handleNumber(event.key);
     }
+    console.log(event.key)
     switch (event.key) {
         case '*':
             handleOperator({id:'multiply',textContent:'×'});
@@ -44,7 +45,14 @@ document.addEventListener("keydown", (event) => {
             handleSpecial('decimal');
             break;
         case 'Backspace':
-            handleSpecial('backspace'); 
+            handleSpecial('backspace');
+            break;
+        case '.':
+            handleSpecial('decimal');
+            break;
+        case '%':
+            handleSpecial('percent');
+            break;
     }
 })
 
@@ -168,8 +176,9 @@ function handleSpecial(sign) {
             current = parseFloat(+current/100);
             break;
         case 'decimal':
-            if (!current.includes('.')) { 
+            if (!current.toString().includes('.')) { 
                 current += '.';
+                console.log(current);
             }
             break;
     }
